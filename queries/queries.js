@@ -44,26 +44,37 @@ db.restaurants.find({ name: { $regex: '^Wil' } }, { restaurant_id: 1, name: 1, b
 db.restaurants.find({ name: { $regex: 'ces$' } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 16. Display restaurant_id, name, borough, and cuisine for those restaurants that contain 'Reg' anywhere in their name.
+db.restaurants.find({ name: { $regex: 'Reg' } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 17. Display restaurants that belong to the Bronx and prepare American or Chinese dishes.
+db.restaurants.find({ borough: 'Bronx', cuisine: { $in: ['American ', 'Chinese'] } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 18. Display restaurant_id, name, borough, and cuisine for those restaurants that belong to Staten Island, Queens, Bronx, or Brooklyn.
+db.restaurants.find({ borough: { $in: ['Staten Island', 'Queens', 'Bronx', 'Brooklyn'] } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 19. Display restaurant_id, name, borough, and cuisine for those restaurants that do not belong to Staten Island, Queens, Bronx, or Brooklyn.
+db.restaurants.find({ borough: { $nin: ['Staten Island', 'Queens', 'Bronx', 'Brooklyn'] } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 20. Display restaurant_id, name, borough, and cuisine for those restaurants that receive a score less than 10.
+db.restaurants.find({ 'grades.score': { $lt: 10 } }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 21. Display restaurant_id, name, borough, and cuisine for those restaurants that prepare seafood, except if they are American, Chinese, or the restaurant name starts with 'Wil'.
+db.restaurants.find({ cuisine: 'Seafood', name: { $not: /^Wil/ }, $or: [{ cuisine: { $nin: ['American ', 'Chinese'] } }, { name: /^Wil/ }] }, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 });
 
 // 22. Display restaurant_id, name, and grades for those restaurants that receive a grade of "A" and a score of 11 with an ISODate "2014-08-11T00:00:00Z".
+db.restaurants.find({ 'grades.grade': 'A', 'grades.score': 11, 'grades.date': ISODate('2014-08-11T00:00:00Z') }, { restaurant_id: 1, name: 1, grades: 1 });
 
 // 23. Display restaurant_id, name, and grades for those restaurants where the second element of the grades array contains a grade of "A" and a score of 9 with an ISODate "2014-08-11T00:00:00Z".
+db.restaurants.find({ 'grades.1.grade': 'A', 'grades.1.score': 9, 'grades.1.date': ISODate('2014-08-11T00:00:00Z') }, { restaurant_id: 1, name: 1, grades: 1 });
 
 // 24. Display restaurant_id, name, address, and geographic location for those restaurants where the second element of the coord array contains a value between 42 and 52.
+db.restaurants.find({ 'address.coord.1': { $gte: 42, $lte: 52 } }, { restaurant_id: 1, name: 1, 'address.coord': 1 });
 
 // 25. Display restaurants organized by name in ascending order.
+db.restaurants.find().sort({ name: 1 });
 
 // 26. Display restaurants organized by name in descending order.
+db.restaurants.find().sort({ name: -1 });
 
 // 27. Display restaurants organized by cuisine name in ascending order and borough in descending order.
 
